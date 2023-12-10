@@ -1,8 +1,25 @@
-# React + Vite
+# A Google/Firefox extension for my <a href="https://github.com/Eclairsombre/RandomAnimePicker">RandomAnimePicker<a/>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Installation
 
-Currently, two official plugins are available:
+1. Clone the repository:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+   ```bash
+   git clone https://github.com/your-username/RandomAnimePicker.git
+   ```
+
+## Google
+
+1. Go to your extension manager
+2. enable Developer mode
+3. Click load unpacked
+4. Select the /build directory
+5. You can now see the app in the taskbar.
+
+## FireFox
+
+1. Enter "about:debugging" in the URL bar
+2. click "This Firefox"
+3. click "Load Temporary Add-on"
+4. open the extension's directory and select manifest.json in /build
+5. You can now see the app in the extension.
