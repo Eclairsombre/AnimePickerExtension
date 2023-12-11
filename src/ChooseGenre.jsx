@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import BoxGenre from './BoxGenre';
 
@@ -32,6 +33,7 @@ function ChooseGenre({ genre, allSelectedGenre, setAllGenre, research }) {
     else {
         return (null);
     }
+
 }
 
 export default ChooseGenre;
