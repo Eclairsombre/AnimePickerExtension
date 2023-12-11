@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import ChooseGenre from "./ChooseGenre.jsx";
 import ShowAnime from "./ShowAnime.jsx";
+import { all } from "axios";
 
 import data from "./output.json";
 
@@ -16,6 +17,9 @@ function RandomAnime() {
   function delay(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
+
+  const [hasClicked, setHasClicked] = useState(false);
+  const [researchBar, setResearchBar] = useState("");
 
   useEffect(() => {
     if (anime) {
@@ -41,6 +45,7 @@ function RandomAnime() {
     setIsError(false);
 
     callApiAnime();
+    setHasClicked(true);
   }
 
   function filterAnimeByGenre(animeList, genresToFilter) {
@@ -108,21 +113,49 @@ function RandomAnime() {
     }
   }
 
+  const handleInputChange = (event) => {
+    setResearchBar(event.target.value);
+  };
+
   return (
-    <>
-      {console.log(anime)}
-      <h1 className="MainTitle">RandomAnimePicker</h1>
-      <ChooseGenre
-        genre={genre}
-        allSelectedGenre={allSelectedGenre}
-        setAllGenre={setAllGenre}
-      />
-      <button className="picker" onClick={() => handleClick()}>
-        Search
-      </button>
-      {anime && <ShowAnime anime={anime} />}
-      {isError ? <h1 className="error">{errorMessage}</h1> : <div></div>}
-    </>
+    <div>
+      <h1 className="MainTitle">Random Anime Picker</h1>
+      {!hasClicked ? (
+        <>
+          <input type="text" value={researchBar} onChange={handleInputChange} />
+          <ChooseGenre
+            genre={genre}
+            allSelectedGenre={allSelectedGenre}
+            setAllGenre={setAllGenre}
+            research={researchBar}
+          />
+          <button
+            className="picker"
+            onClick={() => {
+              setAllGenre([]);
+              setResearchBar("");
+            }}
+            disabled={isLoading}
+          >
+            Reset
+          </button>
+          <button className="picker" onClick={handleClick} disabled={isLoading}>
+            Search
+          </button>
+        </>
+      ) : (
+        <>
+          <button className="reroll" onClick={handleClick} disabled={isLoading}>
+            Reroll
+          </button>
+          <button className="back" onClick={() => setHasClicked(false)}>
+            {"<"}
+          </button>
+          {isLoading ? <LoadingSpinner /> : <ShowAnime anime={anime} />}
+          {isError ? <h1 className="error">{errorMessage}</h1> : <div></div>}
+        </>
+      )}
+    </div>
   );
 }
 

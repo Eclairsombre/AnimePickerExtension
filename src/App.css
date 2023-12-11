@@ -35,11 +35,6 @@ button.picker:active{
     transform: scale(0.9);
 }
 
-p{
-    margin: 1rem;
-
-}
-
 image{
     width: 100%;
     height: auto;
@@ -68,18 +63,13 @@ h1{
 
 
 .allGenre{
-    
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     margin: 1rem;
-   
-    
-    
 }
 
 .box-genre{
-    opacity: 0.4;
     border-radius: 10px;
     border: 1px solid #fff;
     border-radius: 10px;
@@ -91,12 +81,22 @@ h1{
     transition: opacity 0.3s ease-in-out;
     height: 30px;
     width: 100px;
-    margin: 5px;
-    
+    margin: 5px;   
+}
+
+.box-genre button{
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    padding: 0;
 }
 
 .box-genre:hover{
-    opacity: 1;
+    opacity: 1 !important;
 }
     
     
@@ -119,15 +119,12 @@ h1{
 
 
 .handleGenre{
-  
-
     margin: 1rem;
     padding: 5px 5px;
    
     display: flex;
     justify-content: center;
     align-items: center;
-    
 }
 
 .Title {

@@ -1,3 +1,4 @@
+
 import "./App.css";
 
 function ShowAnime({ anime }) {
@@ -53,6 +54,7 @@ function ShowAnime({ anime }) {
       </div>
     );
   }
+
 }
 
 export default ShowAnime;
