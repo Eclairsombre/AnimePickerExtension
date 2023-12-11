@@ -1,6 +1,10 @@
 import fs from 'fs';
 import fetch from 'node-fetch';
 
+
+
+const data = JSON.parse(fs.readFileSync('./output.json', 'utf8'));
+
 var outputArray = [];
 
 const setOutputArray = (newData) => {
@@ -48,5 +52,29 @@ async function App() {
   console.log(outputArray.length)
 }
 
-App();
 
+
+function filterAnimeByGenre(animeList, genresToFilter) {
+  // Check if the animeList and genresToFilter are provided
+  if (!animeList || !genresToFilter || !Array.isArray(animeList) || !Array.isArray(genresToFilter)) {
+    console.error('Invalid input. Please provide valid arrays.');
+    return [];
+  }
+
+  // Filter the anime based on the specified genres
+  const filteredAnime = animeList.filter(anime => {
+    // Check if the anime has genres property
+    if (anime.genres && Array.isArray(anime.genres)) {
+      // Check if all of the specified genres are included in the anime's genres
+      return genresToFilter.every(genre => anime.genres.some(animeGenre => animeGenre.name === genre));
+    }
+
+    return false;
+  });
+
+  return filteredAnime;
+}
+
+const genresToFilter = ['Action', 'Sci-Fi', 'Adventure', 'Comedy', 'Drama'];
+const filteredAnime = filterAnimeByGenre(data, genresToFilter);
+console.log(filteredAnime);

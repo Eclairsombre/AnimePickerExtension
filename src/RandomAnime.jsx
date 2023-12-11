@@ -2,13 +2,14 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import ChooseGenre from "./ChooseGenre.jsx";
 import ShowAnime from "./ShowAnime.jsx";
-import LoadingSpinner from "./LoadingSpinner.jsx";
+
+import data from "./output.json";
 
 function RandomAnime() {
   const [anime, setAnime] = useState({});
   const [genre, setGenre] = useState({});
   const [allSelectedGenre, setAllGenre] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+
   const [errorMessage, setErrorMessage] = useState("");
   const [isError, setIsError] = useState(false);
 
@@ -34,95 +35,88 @@ function RandomAnime() {
   function handleClick() {
     setAnime({});
     setIsError(false);
-    setIsLoading(true);
+
     callApiAnime();
   }
 
-  function callApiAnime() {
-    let val = false;
+  function filterAnimeByGenre(animeList, genresToFilter) {
+    // Check if the animeList and genresToFilter are provided
+    if (
+      !animeList ||
+      !genresToFilter ||
+      !Array.isArray(animeList) ||
+      !Array.isArray(genresToFilter)
+    ) {
+      console.error("Invalid input. Please provide valid arrays.");
+      return [];
+    }
 
-    var requestURL = "https://api.jikan.moe/v4/anime";
-    var request = new XMLHttpRequest();
-    request.open("GET", requestURL);
-    request.responseType = "json";
-    request.send();
-
-    request.onload = function () {
-      if (request.status >= 200 && request.status < 400) {
-        {
-          const temp = request.response;
-          request.response.pagination.items.per_page = 30;
-          console.log(temp.data);
-          if (Object.keys(temp.data.genres).length !== 0) {
-            var genres = temp.data.genres;
-          } else {
-            var genres = {};
-          }
-
-          if (Object.keys(temp.data.demographics).length !== 0) {
-            var demo = temp.data.demographics;
-          } else {
-            var demo = {};
-          }
-
-          var selectedGenres = [];
-          for (let i in genres) {
-            selectedGenres.push(genres[i].name);
-          }
-          for (let i in demo) {
-            selectedGenres.push(demo[i].name);
-          }
-          console.log(selectedGenres);
-          selectedGenres.forEach((element) => {
-            console.log(element);
-            if (
-              (allSelectedGenre.length > 0 &&
-                allSelectedGenre.includes(element)) ||
-              allSelectedGenre.length == 0
-            ) {
-              val = true;
-            }
-          });
-          if (val) {
-            setAnime(temp.data);
-            setIsLoading(false);
-          } else {
-            callApiAnime();
-          }
+    // Filter the anime based on the specified genres
+    const filteredAnime = animeList.filter((anime) => {
+      // Check if the anime has genres, explicit_genres, themes, or demographics property
+      if (
+        (anime.genres && Array.isArray(anime.genres)) ||
+        (anime.explicit_genres && Array.isArray(anime.explicit_genres)) ||
+        (anime.themes && Array.isArray(anime.themes)) ||
+        (anime.demographics && Array.isArray(anime.demographics))
+      ) {
+        // Check if all specified genres are included in the anime's genres, explicit_genres, themes, or demographics
+        if (
+          genresToFilter.every(
+            (genre) =>
+              (anime.genres.length > 0 &&
+                anime.genres.some((animeGenre) => animeGenre.name === genre)) ||
+              (anime.explicit_genres.length > 0 &&
+                anime.explicit_genres.some(
+                  (animeGenre) => animeGenre.name === genre
+                )) ||
+              (anime.themes.length > 0 &&
+                anime.themes.some((theme) => theme.name === genre)) ||
+              (anime.demographics.length > 0 &&
+                anime.demographics.some(
+                  (demographic) => demographic.name === genre
+                ))
+          )
+        ) {
+          return true;
         }
-      } else {
-        console.error("Error sss: " + request.status);
-        setErrorMessage("Nothing found try again");
-        setIsLoading(false);
-        setIsError(true);
       }
-    };
 
-    request.onerror = function () {
-      // There was a connection error of some sort
-      console.error("Connection error");
-      setErrorMessage("A connection error occurred");
-      setIsLoading(false);
-      setIsError(true);
-    };
+      return false;
+    });
+
+    return filteredAnime;
+  }
+
+  function callApiAnime() {
+    if (allSelectedGenre.length === 0) {
+      let nbAlea = Math.floor(Math.random() * data.length);
+      setAnime(data[nbAlea]);
+    } else {
+      let animeFiltered = filterAnimeByGenre(data, allSelectedGenre);
+      if (animeFiltered.length === 0) {
+        setErrorMessage("No anime found with these genres");
+        setIsError(true);
+      } else {
+        let nbAlea = Math.floor(Math.random() * animeFiltered.length);
+        setAnime(animeFiltered[nbAlea]);
+      }
+    }
   }
 
   return (
     <>
+      {console.log(anime)}
       <h1 className="MainTitle">RandomAnimePicker</h1>
       <ChooseGenre
         genre={genre}
         allSelectedGenre={allSelectedGenre}
         setAllGenre={setAllGenre}
       />
-      <button
-        className="picker"
-        onClick={() => handleClick()}
-        disabled={isLoading}
-      >
+      <button className="picker" onClick={() => handleClick()}>
         Search
       </button>
-      {isLoading ? <LoadingSpinner /> : <ShowAnime anime={anime} />}
+      {anime && <ShowAnime anime={anime} />}
       {isError ? <h1 className="error">{errorMessage}</h1> : <div></div>}
     </>
   );
