@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import ChooseGenre from "./ChooseGenre.jsx";
 import ShowAnime from "./ShowAnime.jsx";
-import { all } from "axios";
 
 import data from "./output.json";
 
@@ -135,23 +134,22 @@ function RandomAnime() {
               setAllGenre([]);
               setResearchBar("");
             }}
-            disabled={isLoading}
           >
             Reset
           </button>
-          <button className="picker" onClick={handleClick} disabled={isLoading}>
+          <button className="picker" onClick={handleClick}>
             Search
           </button>
         </>
       ) : (
         <>
-          <button className="reroll" onClick={handleClick} disabled={isLoading}>
+          <button className="reroll" onClick={handleClick}>
             Reroll
           </button>
           <button className="back" onClick={() => setHasClicked(false)}>
             {"<"}
           </button>
-          {isLoading ? <LoadingSpinner /> : <ShowAnime anime={anime} />}
+          {anime && <ShowAnime anime={anime} />}
           {isError ? <h1 className="error">{errorMessage}</h1> : <div></div>}
         </>
       )}
