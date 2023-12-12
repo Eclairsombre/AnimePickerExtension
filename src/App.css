@@ -80,7 +80,7 @@ h1{
     align-items: center;
     transition: opacity 0.3s ease-in-out;
     height: 30px;
-    width: 100px;
+    width: fit-content;
     margin: 5px;   
 }
 

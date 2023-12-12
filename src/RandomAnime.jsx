@@ -13,10 +13,6 @@ function RandomAnime() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isError, setIsError] = useState(false);
 
-  function delay(ms) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
-  }
-
   const [hasClicked, setHasClicked] = useState(false);
   const [researchBar, setResearchBar] = useState("");
 
