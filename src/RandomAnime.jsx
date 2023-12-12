@@ -45,6 +45,12 @@ function RandomAnime() {
 
   function filterAnimeByGenre(animeList, genresToFilter) {
     // Check if the animeList and genresToFilter are provided
+    console.log(genresToFilter);
+
+    if (genresToFilter.length === 0) {
+      console.log(animeList);
+      return animeList;
+    }
     if (
       !animeList ||
       !genresToFilter ||
@@ -95,7 +101,17 @@ function RandomAnime() {
   function callApiAnime() {
     if (allSelectedGenre.length === 0) {
       let nbAlea = Math.floor(Math.random() * data.length);
-      setAnime(data[nbAlea]);
+      var requestURL =
+        "https://api.jikan.moe/v4/anime/" + data[nbAlea].id + "/full";
+      var request = new XMLHttpRequest();
+      request.open("GET", requestURL);
+      request.responseType = "json";
+      request.send();
+      request.onload = function () {
+        const temp = request.response;
+        console.log(temp.data);
+        setAnime(temp.data);
+      };
     } else {
       let animeFiltered = filterAnimeByGenre(data, allSelectedGenre);
       if (animeFiltered.length === 0) {
