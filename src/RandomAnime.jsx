@@ -107,7 +107,20 @@ function RandomAnime() {
         setIsError(true);
       } else {
         let nbAlea = Math.floor(Math.random() * animeFiltered.length);
-        setAnime(animeFiltered[nbAlea]);
+        console.log(animeFiltered[nbAlea].id);
+        var requestURL =
+          "https://api.jikan.moe/v4/anime/" +
+          animeFiltered[nbAlea].id +
+          "/full";
+        var request = new XMLHttpRequest();
+        request.open("GET", requestURL);
+        request.responseType = "json";
+        request.send();
+        request.onload = function () {
+          const temp = request.response;
+          console.log(temp.data);
+          setAnime(temp.data);
+        };
       }
     }
   }
