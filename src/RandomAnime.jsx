@@ -9,6 +9,7 @@ function RandomAnime() {
   const [anime, setAnime] = useState({});
   const [genre, setGenre] = useState({});
   const [allSelectedGenre, setAllGenre] = useState([]);
+  const [AlreadySeenId, setAlreadySeenId] = useState([]);
 
   const [errorMessage, setErrorMessage] = useState("");
   const [isError, setIsError] = useState(false);
@@ -85,7 +86,8 @@ function RandomAnime() {
               (anime.demographics.length > 0 &&
                 anime.demographics.some(
                   (demographic) => demographic.name === genre
-                ))
+                ) &&
+                !AlreadySeenId.includes(anime.id))
           )
         ) {
           return true;
@@ -101,6 +103,9 @@ function RandomAnime() {
   function callApiAnime() {
     if (allSelectedGenre.length === 0) {
       let nbAlea = Math.floor(Math.random() * data.length);
+      while (AlreadySeenId.includes(data[nbAlea].id)) {
+        nbAlea = Math.floor(Math.random() * data.length);
+      }
       var requestURL =
         "https://api.jikan.moe/v4/anime/" + data[nbAlea].id + "/full";
       var request = new XMLHttpRequest();
@@ -111,6 +116,7 @@ function RandomAnime() {
         const temp = request.response;
         console.log(temp.data);
         setAnime(temp.data);
+        setAlreadySeenId([...AlreadySeenId, data[nbAlea].id]);
       };
     } else {
       let animeFiltered = filterAnimeByGenre(data, allSelectedGenre);
@@ -132,6 +138,7 @@ function RandomAnime() {
           const temp = request.response;
           console.log(temp.data);
           setAnime(temp.data);
+          setAlreadySeenId([...AlreadySeenId, animeFiltered[nbAlea].id]);
         };
       }
     }
