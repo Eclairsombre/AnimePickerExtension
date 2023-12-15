@@ -1,138 +1,193 @@
-import { useEffect, useState } from 'react'
-import './App.css'
-import ChooseGenre from './ChooseGenre.jsx'
-import ShowAnime from './ShowAnime.jsx'
-import LoadingSpinner from "./LoadingSpinner.jsx";
+import { useEffect, useState } from "react";
+import "./App.css";
+import ChooseGenre from "./ChooseGenre.jsx";
+import ShowAnime from "./ShowAnime.jsx";
+import data from "./output.json";
+
+import dice from "./assets/dice-64.png";
 
 function RandomAnime() {
-  
   const [anime, setAnime] = useState({});
   const [genre, setGenre] = useState({});
   const [allSelectedGenre, setAllGenre] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [AlreadySeenId, setAlreadySeenId] = useState([]);
+
   const [errorMessage, setErrorMessage] = useState("");
   const [isError, setIsError] = useState(false);
-  
-  useEffect(() => {
-    if(anime){
 
-    }
-    else{
+  const [hasClicked, setHasClicked] = useState(false);
+  const [researchBar, setResearchBar] = useState("");
+
+  useEffect(() => {
+    if (anime) {
+    } else {
       setAnime({});
-    }
-    
-  },[]);
-
-  useEffect(() => {
-    var requestURL = 'https://api.jikan.moe/v4/genres/anime';
-    var request = new XMLHttpRequest();
-    request.open('GET', requestURL);
-    request.responseType = 'json';
-    request.send();
-    request.onload = function() {
-      const temp = request.response;
-      setGenre(temp.data);
     }
   }, []);
 
+  useEffect(() => {
+    var requestURL = "https://api.jikan.moe/v4/genres/anime";
+    var request = new XMLHttpRequest();
+    request.open("GET", requestURL);
+    request.responseType = "json";
+    request.send();
+    request.onload = function () {
+      const temp = request.response;
+      setGenre(temp.data);
+    };
+  }, []);
 
-  function handleClick()
-  {
+  function handleClick() {
     setAnime({});
     setIsError(false);
-    setIsLoading(true);
+
     callApiAnime();
+    setHasClicked(true);
   }
-  
+
+  function filterAnimeByGenre(animeList, genresToFilter) {
+    // Check if the animeList and genresToFilter are provided
+    console.log(genresToFilter);
+
+    if (genresToFilter.length === 0) {
+      console.log(animeList);
+      return animeList;
+    }
+    if (
+      !animeList ||
+      !genresToFilter ||
+      !Array.isArray(animeList) ||
+      !Array.isArray(genresToFilter)
+    ) {
+      console.error("Invalid input. Please provide valid arrays.");
+      return [];
+    }
+
+    // Filter the anime based on the specified genres
+    const filteredAnime = animeList.filter((anime) => {
+      // Check if the anime has genres, explicit_genres, themes, or demographics property
+      if (
+        (anime.genres && Array.isArray(anime.genres)) ||
+        (anime.explicit_genres && Array.isArray(anime.explicit_genres)) ||
+        (anime.themes && Array.isArray(anime.themes)) ||
+        (anime.demographics && Array.isArray(anime.demographics))
+      ) {
+        // Check if all specified genres are included in the anime's genres, explicit_genres, themes, or demographics
+        if (
+          genresToFilter.every(
+            (genre) =>
+              (anime.genres.length > 0 &&
+                anime.genres.some((animeGenre) => animeGenre.name === genre)) ||
+              (anime.explicit_genres.length > 0 &&
+                anime.explicit_genres.some(
+                  (animeGenre) => animeGenre.name === genre
+                )) ||
+              (anime.themes.length > 0 &&
+                anime.themes.some((theme) => theme.name === genre)) ||
+              (anime.demographics.length > 0 &&
+                anime.demographics.some(
+                  (demographic) => demographic.name === genre
+                ) &&
+                !AlreadySeenId.includes(anime.id))
+          )
+        ) {
+          return true;
+        }
+      }
+
+      return false;
+    });
+
+    return filteredAnime;
+  }
 
   function callApiAnime() {
-    let val=false;
-    
-
-    var requestURL = 'https://api.jikan.moe/v4/random/anime';
-    var request = new XMLHttpRequest();
-    request.open('GET', requestURL);
-    request.responseType = 'json';
-    request.send();
-  
-    request.onload = function() {
-    if (request.status >= 200 && request.status < 400) {
-    {const temp = request.response;
-    console.log(temp.data);
-      if(Object.keys(temp.data.genres).length!==0)
-     {
-      var genres = temp.data.genres;
-     }
-     else{
-      var genres ={};
-     }
-
-      if(Object.keys(temp.data.demographics).length!==0)
-     {
-      var demo = temp.data.demographics;
-     }
-     else{
-      var demo ={};
-     }
-     
-     
-      var selectedGenres = []; 
-         for(let i in genres) { 
-          selectedGenres.push(genres[i].name); 
-         };
-         for(let i in demo) { 
-          selectedGenres.push(demo[i].name); 
-         };
-      console.log(selectedGenres);
-      selectedGenres.forEach(element => {
-        console.log(element);
-        if(allSelectedGenre.length>0 && allSelectedGenre.includes(element) || allSelectedGenre.length==0){
-
-           
-            val = true;
-           
-        }
-        
-      });
-      if(val){
-        setAnime(temp.data);
-        setIsLoading(false);
-      } 
-      else{
-        callApiAnime();
+    if (allSelectedGenre.length === 0) {
+      let nbAlea = Math.floor(Math.random() * data.length);
+      while (AlreadySeenId.includes(data[nbAlea].id)) {
+        nbAlea = Math.floor(Math.random() * data.length);
       }
-      
-      
-    }}
-    else{
-      console.error("Error sss: " + request.status);
-      setErrorMessage("Nothing found try again");
-      setIsLoading(false);
-      setIsError(true);
-      
+      var requestURL =
+        "https://api.jikan.moe/v4/anime/" + data[nbAlea].id + "/full";
+      var request = new XMLHttpRequest();
+      request.open("GET", requestURL);
+      request.responseType = "json";
+      request.send();
+      request.onload = function () {
+        const temp = request.response;
+        console.log(temp.data);
+        setAnime(temp.data);
+        setAlreadySeenId([...AlreadySeenId, data[nbAlea].id]);
+      };
+    } else {
+      let animeFiltered = filterAnimeByGenre(data, allSelectedGenre);
+      if (animeFiltered.length === 0) {
+        setErrorMessage("No anime found with these genres");
+        setIsError(true);
+      } else {
+        let nbAlea = Math.floor(Math.random() * animeFiltered.length);
+        console.log(animeFiltered[nbAlea].id);
+        var requestURL =
+          "https://api.jikan.moe/v4/anime/" +
+          animeFiltered[nbAlea].id +
+          "/full";
+        var request = new XMLHttpRequest();
+        request.open("GET", requestURL);
+        request.responseType = "json";
+        request.send();
+        request.onload = function () {
+          const temp = request.response;
+          console.log(temp.data);
+          setAnime(temp.data);
+          setAlreadySeenId([...AlreadySeenId, animeFiltered[nbAlea].id]);
+        };
+      }
     }
-    }
-    
-    request.onerror = function() {
-      // There was a connection error of some sort
-      console.error("Connection error");
-      setErrorMessage("A connection error occurred");
-      setIsLoading(false);
-      setIsError(true);
-    };
-    
   }
 
+  const handleInputChange = (event) => {
+    setResearchBar(event.target.value);
+  };
+
   return (
-    <>
-      <h1 className='MainTitle'>RandomAnimePicker</h1>
-      <ChooseGenre genre={genre} allSelectedGenre={allSelectedGenre} setAllGenre={setAllGenre}/>
-      <button className='picker' onClick={() => handleClick()} disabled={isLoading}>Search</button>
-      {isLoading  ? <LoadingSpinner /> :  <ShowAnime anime={anime} />} 
-      {isError ? <h1 className='error'>{errorMessage}</h1> : <div></div>}
-     
-    </>
-  )
+    <div>
+      <h1 className="MainTitle">Random Anime Picker</h1>
+      {!hasClicked ? (
+        <>
+          <input type="text" className='textInput' value={researchBar} onChange={handleInputChange} placeholder="Search a filter here"/>
+          <ChooseGenre
+            genre={genre}
+            allSelectedGenre={allSelectedGenre}
+            setAllGenre={setAllGenre}
+            research={researchBar}
+          />
+          <button
+            className="picker"
+            onClick={() => {
+              setAllGenre([]);
+              setResearchBar("");
+            }}
+          >
+            Reset
+          </button>
+          <button className="picker" onClick={handleClick}>
+            Search
+          </button>
+        </>
+      ) : (
+        <>
+          <button className="reroll" onClick={handleClick}>
+            <img src={dice} alt="dice"/>
+          </button>
+          <button className="back" onClick={() => setHasClicked(false)}>
+            {"<"}
+          </button>
+          {anime && <ShowAnime anime={anime} />}
+          {isError ? <h1 className="error">{errorMessage}</h1> : <div></div>}
+        </>
+      )}
+    </div>
+  );
 }
 
 export default RandomAnime;

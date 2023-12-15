@@ -1,4 +1,4 @@
-body{
+body {
     background-color: #282c34;
     color: white;
     font-family: 'Roboto', sans-serif;
@@ -15,8 +15,8 @@ body{
     height: auto;
 }
 
-button.picker{
-    background-color:#fff;
+button.picker {
+    background-color: #fff;
     border: none;
     border-radius: 5px;
     color: #282c34;
@@ -27,90 +27,82 @@ button.picker{
     transition: all 0.3s ease-in-out;
 }
 
-button.picker:hover{
+button.picker:hover {
     transform: scale(1.1);
 }
 
-button.picker:active{
+button.picker:active {
     transform: scale(0.9);
 }
 
-p{
-    margin: 1rem;
-
-}
-
-image{
+image {
     width: 100%;
     height: auto;
     margin: 1rem;
 }
 
-h1{
+h1 {
     font-size: 2rem;
-    margin: 1rem;
-
 }
 
-.MainTitle{
-    
+.MainTitle {
     margin: 1rem;
     text-decoration: underline 3px solid #fff;
-
-
 }
 
-.synopsis{
-    margin: 1rem;
-    text-align: center;
-    font-size: 1.2rem;
-}
-
-
-.allGenre{
-    
+.allGenre {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     margin: 1rem;
-   
-    
-    
 }
 
-.box-genre{
-    opacity: 0.4;
+.box-genre {
     border-radius: 10px;
     border: 1px solid #fff;
     border-radius: 10px;
     padding: 5px 5px;
-   
+
     display: flex;
     justify-content: center;
     align-items: center;
     transition: opacity 0.3s ease-in-out;
     height: 30px;
-    width: 100px;
+    width: 25vw;
     margin: 5px;
-    
 }
 
-.box-genre:hover{
-    opacity: 1;
+.box-genre button {
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    cursor: pointer;
+    text-align: center;
+    padding: 0;
 }
-    
-    
-.deleteButton{
+
+.box-genre:hover {
+    opacity: 1 !important;
+}
+
+
+.deleteButton {
     background-color: #fff;
     border: none;
     border-radius: 5px;
     color: #282c34;
     cursor: pointer;
-    
+
     transition: all 0.3s ease-in-out;
 }
 
-.nameGenre{
+.title-Image {
+    margin: 5%
+}
+
+.nameGenre {
     margin: 0 5px;
     font-size: 0.8rem;
     font-weight: bold;
@@ -118,62 +110,107 @@ h1{
 }
 
 
-.handleGenre{
-  
-
+.handleGenre {
     margin: 1rem;
     padding: 5px 5px;
-   
+
     display: flex;
     justify-content: center;
     align-items: center;
-    
+}
+
+.Box-Anime-Element {
+    display: inline-block;
+    background-color: #31343a;
+    border-radius: 50px;
+    min-width: 300px;
+    margin: 25px;
+    padding: 25px;
 }
 
 .Title {
-    margin: 1rem;
-    text-decoration: underline 3px solid #fff;
+    margin-bottom: 25px;
+    padding: 0;
 }
 
-.Synopsis{
-    margin: 1rem;
-    text-align: center;
+.Synopsis {
+    text-align: justify;
     font-size: 1.2rem;
-
 }
 
-.InfoLeft{
-    border: #fff 1px solid;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: left;
-    margin: 1rem;
-    width: 50%;
+.synopsis-gradient {
+    position: relative;
+    z-index: 1;
 }
 
-.InfoRight{
-    border: #fff 1px solid;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: center;
-    margin: 1rem;
-    width: 50%;
-}
-
-.InfoContainer{
-    display: flex;
-    flex-direction: row;
- 
-    margin: 1rem;
+.synopsis-gradient::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, #31343a);
+    pointer-events: none;
+    z-index: 2;
 }
 
-a{
+.data-Anime {
+    text-align: left;
+}
+
+a {
     color: #fff;
-    text-decoration:underline;
+    text-decoration: underline;
     margin: 1rem;
     font-size: 1.2rem;
     transition: all 0.3s ease-in-out;
+}
+
+.textInput {
+    width: 50%;
+}
+
+.moreSysnopsis {
+    background-color: transparent;
+    border: none;
+    position: absolute;
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    font-weight: bolder;
+    font-size: 2rem;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.back {
+    background-color: transparent;
+    border: none;
+    position: fixed;
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    font-weight: bolder;
+    font-size: 2rem;
+    left: 25px;
+    top: 25px;
+}
+
+
+.reroll {
+    background-color: transparent;
+    border: none;
+    position: fixed;
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+    right: 25px;
+    top: 25px;
+}
+
+.reroll img {
+    width: 33px;
+    height: 33px;
+    z-index: 10;
 }

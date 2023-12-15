@@ -23,3 +23,8 @@
 3. click "Load Temporary Add-on"
 4. open the extension's directory and select manifest.json in /build
 5. You can now see the app in the extension.
+
+
+## Collaborators
+<a href="https://github.com/NichiHachi">Nichi Hachi<a/>
+   
