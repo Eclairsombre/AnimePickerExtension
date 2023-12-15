@@ -5,6 +5,9 @@ import ShowAnime from "./ShowAnime.jsx";
 
 import data from "./output.json";
 
+import dice from "./assets/dice-64.png";
+
+
 function RandomAnime() {
   const [anime, setAnime] = useState({});
   const [genre, setGenre] = useState({});
@@ -153,7 +156,9 @@ function RandomAnime() {
       <h1 className="MainTitle">Random Anime Picker</h1>
       {!hasClicked ? (
         <>
-          <input type="text" value={researchBar} onChange={handleInputChange} />
+
+          <input type="text" className='textInput' value={researchBar} onChange={handleInputChange} placeholder="Search a filter here"/>
+
           <ChooseGenre
             genre={genre}
             allSelectedGenre={allSelectedGenre}
@@ -176,7 +181,9 @@ function RandomAnime() {
       ) : (
         <>
           <button className="reroll" onClick={handleClick}>
-            Reroll
+
+            <img src={dice} alt="dice"/>
+
           </button>
           <button className="back" onClick={() => setHasClicked(false)}>
             {"<"}
