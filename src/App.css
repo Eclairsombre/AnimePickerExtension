@@ -128,6 +128,10 @@ h1 {
     min-width: 300px;
     margin: 25px;
     padding: 25px;
+    
+   
+    
+
 }
 
 .Title {
@@ -197,6 +201,7 @@ a {
     font-size: 2rem;
     left: 25px;
     top: 25px;
+    cursor: pointer;
 }
 
 
@@ -215,4 +220,14 @@ a {
     width: 33px;
     height: 33px;
     z-index: 10;
+    cursor: pointer;
+
+}
+
+.Episodes, .Type , .Score, .Status, .Rank, .Start_Date, .Rating, .Trailer{
+    text-align: center;
+}
+
+.Trailer {
+    margin: 0px;
 }
