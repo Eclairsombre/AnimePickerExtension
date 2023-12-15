@@ -1,3 +1,4 @@
+
 import React, { useState , useEffect } from 'react';
 import "./App.css";
 
@@ -8,11 +9,13 @@ function ShowAnime({ anime }) {
     setIsSynopsisOpen(true);
   }, [anime]);
 
+
   if (Object.keys(anime).length === 0) {
     return <div></div>;
   } else {
     return (
       <div>
+
         <div className="Box-Anime-Element">
           <h1 className="Title">{anime.title}</h1>
           <img src={anime.images.jpg.image_url} alt="Anime Poster" />
@@ -53,6 +56,7 @@ function ShowAnime({ anime }) {
             {anime.trailer.url && (
               <a href={anime.trailer.url} target="_blank">View Trailer</a>
             )}
+
           </div>
         </div>
       </div>

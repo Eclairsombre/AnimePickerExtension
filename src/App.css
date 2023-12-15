@@ -68,8 +68,10 @@ h1 {
     align-items: center;
     transition: opacity 0.3s ease-in-out;
     height: 30px;
+
     width: 25vw;
     margin: 5px;
+
 }
 
 .box-genre button {
